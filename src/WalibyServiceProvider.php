@@ -1,6 +1,6 @@
 <?php
 
-namespace ramatimati\WalibyServiceProvider;
+namespace Ramatimati\Waliby;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +14,8 @@ class WalibyServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->mergeConfigFrom(__DIR__.'/config/waliby.php', 'waliby');
+        $this->publishFiles();
     }
 
     /**
@@ -25,7 +26,16 @@ class WalibyServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        // $this->loadRoutesFrom(__DIR__.'/routes/web.php');
-        // $this->loadViewsFrom(__DIR__.'/resources/views', 'Waliby');
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'waliby');
+        $this->loadMigrationSFrom(__DIR__.'database/migrations');
+    }
+
+    private function publishFiles(){
+        $publishTag = 'Waliby';
+
+        $this->publishes([
+            __DIR__.'/resources/views' => base_path('resources/views/vendor/'.$publishTag),
+        ], $publishTag);
     }
 }

@@ -1,34 +1,34 @@
 {
-    "name": "ramatimati/waliby",
-    "description": "WA Gateway Management for Laravel",
-    "type": "package",
-    "require": {
-        "nesbot/carbon": "^2.72",
-        "guzzlehttp/guzzle": "^7.9",
-        "illuminate/support": "^8.83",
-        "illuminate/collections": "^8.0",
-        "illuminate/contracts": "^8.0",
-        "illuminate/macroable": "^8.0",
-        "doctrine/inflector": "^1.4"
-    },
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Ramatimati\\Waliby\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "ramaTImati",
-            "email": "rifqiramadhan1512@gmail.com"
-        }
-    ],
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Ramatimati\\Waliby\\WalibyServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "dev"
+  "name": "ramatimati/waliby",
+  "description": "WA Gateway Management for Laravel",
+  "type": "package",
+  "require": {
+    "nesbot/carbon": "^2.72",
+    "guzzlehttp/guzzle": "^7.9",
+    "illuminate/support": "^5.0|^6.0|^7.0",
+    "yajra/laravel-datatables-oracle": "~9.0"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Ramatimati\\Waliby\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "ramaTImati",
+      "email": "rifqiramadhan1512@gmail.com"
+    }
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Ramatimati\\Waliby\\WalibyServiceProvider"
+      ],
+      "aliases": {
+        "Waliby": "Ramatimati\\Waliby\\Facades\\WalibyFacade"
+      }
+    }
+  },
+  "minimum-stability": "dev"
 }
