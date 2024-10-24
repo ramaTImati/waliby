@@ -5,12 +5,11 @@ namespace Ramatimati\Waliby\App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageTemplate extends Model {
+class History extends Model {
     use SoftDeletes;
 
-    protected $table = 'waliby_message_templates';
-    public $incrementing = false;
+    protected $table = 'waliby_message_histories';
     public $fillable = [
-        'id', 'message', 'table', 'created_by'
+        'id', 'message_id', 'phone_number', 'message_text', 'status'
     ];
 }

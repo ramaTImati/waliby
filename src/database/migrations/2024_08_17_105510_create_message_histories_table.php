@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMessageHistories extends Migration
+class CreateMessageHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,8 +15,8 @@ class CreateMessageHistories extends Migration
     {
         //
         Schema::create('waliby_message_histories', function (Blueprint $table) {
-            $table->increments('id')->primary();
-            $table->integer('message_id');
+            $table->increments('id');
+            $table->uuid('message_id');
             $table->string('phone_number');
             $table->text('message_text');
             $table->string('status');

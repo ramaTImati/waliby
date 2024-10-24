@@ -3,38 +3,26 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 @endpush
 
 @section('content')
     <button type="button" class="btn btn-success mb-2" id="createFormButton">Create</button>
     <div id="createField" class="border rounded p-2" style="display:none">
-        <form action="#" id="messageTemplateForm">
+        <form action="#" id="messageEventForm">
             @csrf
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Message Template</label>
-                <textarea class="form-control" name="template" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="eventname" class="form-label">Event Name</label>
+                <input type="text" name="eventname" id="eventname" class="form-control">
             </div>
             <div class="mb-3">
-                <label for="basetable" class="form-label">Base Table</label>
-                <input type="text" name="basetable" id="basetable" class="form-control">
+                <label for="messageTemplate" class="form-label">Message Template</label>
+                <select name="messageTemplate" id="messageTemplate" class="form-control"></select>
             </div>
             <div class="mb-3">
-                <ul>
-                    <li class="text-secondary"><small>Write $params$ to use dynamic messages</small></li>
-                    <li class="text-secondary">
-                        <small>
-                            available dynamic parameters : 
-                            @forelse($column as $row) 
-                                <b>{{$row}}</b>
-                                @if(!$loop->last)
-                                ,
-                                @endif
-                            @empty 
-                                no parameters!
-                            @endforelse
-                        </small>
-                    </li>
-                </ul>
+                <label for="receiver" class="form-label">Receiver</label>
+                <select name="receiver[]" id="selectReceiver" class="form-control"></select>
             </div>
             <div class="row">
                 <div class="col">
@@ -48,9 +36,9 @@
     <table class="table table-bordered" id="table">
         <thead>
             <td class="text-center">#</td>
-            <td class="text-center">Id</td>
-            <td class="text-center">Text</td>
-            <td class="text-center">Created By</td>
+            <td class="text-center">Event Name</td>
+            <td class="text-center">Message Template Id</td>
+            <td class="text-center">Event Status</td>
             <td class="text-center">Action</td>
         </thead>
     </table>
@@ -60,6 +48,7 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.2/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function(){
 
@@ -68,12 +57,12 @@
         let table = $("#table").DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('waliby.templates.index') }}',
+            ajax: '{{ route('waliby.event.index') }}',
             columns: [
                 {data: 'DT_RowIndex'},
-                {data: 'uuid'},
-                {data: 'message'},
-                {data: 'created_by'},
+                {data: 'event_name'},
+                {data: 'message_template_id'},
+                {data: 'event_status'},
                 {data: 'action', orderable: false, searchable: false}
             ]
         })
@@ -86,11 +75,11 @@
             $("#createField").slideUp()
         })
 
-        $("#messageTemplateForm").submit(function(event){
+        $("#messageEventForm").submit(function(event){
             event.preventDefault()
             let fd = new FormData(this)
             $.ajax({
-                url: "{{ route('waliby.templates.store') }}",
+                url: "{{ route('waliby.event.store') }}",
                 method: "POST",
                 data: fd,
                 dataType: "JSON",
@@ -108,7 +97,7 @@
                 success: function(response){
                     console.log(response);
                     $("#createField").slideUp()
-                    $("#messageTemplateForm")[0].reset()
+                    $("#messageEventForm")[0].reset()
                     table.draw()
                     Swal.fire({
                         title: "Success",
@@ -126,5 +115,41 @@
                 }
             })
         })
+
+        $("#selectReceiver").select2({
+            theme: "bootstrap-5",
+            placeholder: "--- Select Receiver ---",
+            allowClear: true,
+            multiple: true,
+            width: "100%",
+            closeOnSelect: false,
+            ajax: {
+                url: "{{ route('waliby.event.getReceiver') }}",
+                processResults: function(data){
+                    return {
+                        results: data
+                    }
+                }
+            }
+        })
+
+        $("#messageTemplate").select2({
+            theme: "bootstrap-5",
+            placeholder: "--- Select Message Template ---",
+            allowClear: true,
+            width: "100%",
+            ajax: {
+                url: "{{ route('waliby.event.getMessageTemplate') }}",
+                processResults: function(data){
+                    return {
+                        results: data
+                    }
+                }
+            }
+        })
+
+        function sent(id){
+            
+        }
     </script>
 @endpush

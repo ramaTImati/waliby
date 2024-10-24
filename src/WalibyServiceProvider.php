@@ -14,9 +14,7 @@ class WalibyServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->app->singleton(Waliby::class, function(){
-            return new Waliby();
-        });
+        $this->mergeConfigFrom(__DIR__.'/config/waliby.php', 'waliby');
         $this->publishFiles();
     }
 

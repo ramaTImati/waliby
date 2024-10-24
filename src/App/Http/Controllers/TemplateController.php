@@ -7,10 +7,13 @@ use Ramatimati\Waliby\App\Models\MessageTemplate;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
-class TemplateController extends BaseController{
+class TemplateController extends BaseController {
     public function index(Request $request){
-        // dd($data);
+        $table = config('waliby.phoneBookTable');
+        $column = DB::connection()->getSchemaBuilder()->getColumnListing($table);
+
         if ($request->ajax()) {
             $data = MessageTemplate::orderBy('created_at', 'DESC')->get();
             return Datatables::of($data)
@@ -24,7 +27,7 @@ class TemplateController extends BaseController{
                 ->rawColumns(['uuid', 'action'])
                 ->make(true);
         }
-        return view('waliby::message_template.index');
+        return view('waliby::message_template.index', compact('column'));
     }
 
     public function store(Request $request){

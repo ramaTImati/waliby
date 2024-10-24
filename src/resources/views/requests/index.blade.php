@@ -8,33 +8,17 @@
 @section('content')
     <button type="button" class="btn btn-success mb-2" id="createFormButton">Create</button>
     <div id="createField" class="border rounded p-2" style="display:none">
-        <form action="#" id="messageTemplateForm">
+        <form action="#" id="payloadForm">
             @csrf
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Message Template</label>
-                <textarea class="form-control" name="template" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="basetable" class="form-label">Request Name</label>
+                <input type="text" name="requestName" id="requestName" class="form-control">
+                <small class="text-secondary">write with camel case and don't use space</small>
             </div>
             <div class="mb-3">
-                <label for="basetable" class="form-label">Base Table</label>
-                <input type="text" name="basetable" id="basetable" class="form-control">
-            </div>
-            <div class="mb-3">
-                <ul>
-                    <li class="text-secondary"><small>Write $params$ to use dynamic messages</small></li>
-                    <li class="text-secondary">
-                        <small>
-                            available dynamic parameters : 
-                            @forelse($column as $row) 
-                                <b>{{$row}}</b>
-                                @if(!$loop->last)
-                                ,
-                                @endif
-                            @empty 
-                                no parameters!
-                            @endforelse
-                        </small>
-                    </li>
-                </ul>
+                <label for="exampleFormControlTextarea1" class="form-label">Request Payload Structure</label>
+                <textarea class="form-control" name="payloadStructure" id="payloadStructure" rows="5"></textarea>
+                <small class="text-secondary">fill with php array format!</small>
             </div>
             <div class="row">
                 <div class="col">
@@ -48,10 +32,8 @@
     <table class="table table-bordered" id="table">
         <thead>
             <td class="text-center">#</td>
-            <td class="text-center">Id</td>
-            <td class="text-center">Text</td>
-            <td class="text-center">Created By</td>
-            <td class="text-center">Action</td>
+            <td class="text-center">Name</td>
+            <td class="text-center">Payload</td>
         </thead>
     </table>
 @endsection
@@ -86,11 +68,11 @@
             $("#createField").slideUp()
         })
 
-        $("#messageTemplateForm").submit(function(event){
+        $("#payloadForm").submit(function(event){
             event.preventDefault()
             let fd = new FormData(this)
             $.ajax({
-                url: "{{ route('waliby.templates.store') }}",
+                url: "{{ route('waliby.requests.store') }}",
                 method: "POST",
                 data: fd,
                 dataType: "JSON",
@@ -108,7 +90,7 @@
                 success: function(response){
                     console.log(response);
                     $("#createField").slideUp()
-                    $("#messageTemplateForm")[0].reset()
+                    $("#payloadForm")[0].reset()
                     table.draw()
                     Swal.fire({
                         title: "Success",
