@@ -93,8 +93,4 @@ class EventController extends BaseController {
         $result = array_values($result);
         return response()->json($result);
     }
-
-    public function sentEvent($id){
-        
-    }
 }

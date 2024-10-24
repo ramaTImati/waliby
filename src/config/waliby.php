@@ -14,8 +14,8 @@ return [
     // 'phoneBook2ForeignKey' => env('WALIBY_PHONE_BOOK_2_FOREIGN_KEY', 'id'),
     // 'phoneNumberReceiverNameColumn' => env('WALIBY_PHONE_BOOK_RECEIVER_NAME_COLUMN', 'name'),
     'phoneBookTable' => env('WALIBY_PHONE_BOOK', 'waliby'),
-    'phoneNumberColumn' => env('WALIBY_PHONE_NUMBER_COLUMN', 'phone'),
-    'nameColumn' => env('WALIBY_NAME_COLUMN', 'name'),
+    'phoneNumberColumn' => env('WALIBY_PHONE_NUMBER_COLUMN', 'nomor'),
+    'nameColumn' => env('WALIBY_NAME_COLUMN', 'nama'),
 
     /*
     |--------------------------------------------------------------------------

@@ -102,39 +102,14 @@ class Waliby {
     }
 
     public static function SendMessage(string $type = 'POST', string $endpoint, array $header, array $payload){
-        // $client = new Client();
-        // $request = $client->request($type, $endpoint, [
-        //     'headers' => $header,
-        //     'json' => $payload,
-        // ]);
+        $client = new Client();
+        $request = $client->request($type, $endpoint, [
+            'headers' => $header,
+            'json' => $payload,
+        ]);
 
-        // $response = $request->getBody()->getContents();
-        $response = '{
-            "status": true,
-            "message": "Text Message is pending and waiting to be processed. with error: 0",
-            "data": {
-                "device_id": "7RRG1P",
-                "quota": "unlimited",
-                "messages": [
-                    {
-                        "id": "164e7a41-cf93-4c7e-8644-3e970f6ccb9d",
-                        "phone": "6282315535393",
-                        "message": "selamat pagi saudara Rifqi Ramadhan, sekarang tanggal 24 October 2024",
-                        "status": "pending",
-                        "ref_id": null
-                    },
-                    {
-                        "id": "33761f08-4ae2-41c7-b16b-e15fab8ee215",
-                        "phone": "628986957465",
-                        "message": "selamat pagi saudara rama, sekarang tanggal 24 October 2024",
-                        "status": "pending",
-                        "ref_id": null
-                    }
-                ]
-            }
-        }';
+        $response = $request->getBody()->getContents();
         $response = json_decode($response);
-        // dd($response->data);
         $data = $response->data->messages;
         foreach ($data as $key => $value) {
             History::create([
@@ -144,8 +119,6 @@ class Waliby {
                 'status' => $value->status,
             ]);
         }
-        // return response()->json($response->data);
-
 
         return response()->json($response);
     }
