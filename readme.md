@@ -1,16 +1,16 @@
 # Waliby (WA Gateway Library for Laravel)
 
-This library requires Laravel > 5.8
+Laravel > 5.8
 
 ## Installation
 
-Use Composer
+#### Use Composer
 
 ```bash
 composer require ramatimati/waliby
 ```
 
-Runing Migration
+#### Runing Migration
 ```bash 
 php artisan migrate
 ```
@@ -22,11 +22,17 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 ```
 
 ## Configuration
-.env
+This package required base table or database view that contain phone number and name !\
+.env `required`
 ```php
 WALIBY_PHONE_BOOK=your table or view
 WALIBY_PHONE_NUMBER_COLUMN=
 WALIBY_NAME_COLUMN=
+```
+
+If you want to customize view, simply publish blade template from this package. Published file located in `resource/views/vendor/Waliby`
+```bash
+php artisan vendor:publish --tag=Waliby
 ```
 
 ## Routes
@@ -36,7 +42,13 @@ Waliby included some routes
 ```php
 https://example.com/waliby/templates
 https://example.com/waliby/event
+https://example.com/waliby/history
+```
 
+#### Webhook
+Waliby stores all activity on SendMessage function and included webhook url. Use this url to set webhook for updating message status. This url support `POST` or `GET` method
+```php
+https://example.com/waliby/history/stats
 ```
 
 ## Usage
@@ -51,7 +63,7 @@ public function test(){
 }
 ```
 
-## Method
+#### Available Method
 1. `GetMessage(array)`
    - `string` templateId => Message template id
    - `string` phoneNumber => Receiver phone number
