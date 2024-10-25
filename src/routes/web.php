@@ -21,6 +21,7 @@ Route::prefix('waliby')->name('waliby.')->middleware('web')->group(function(){
     Route::prefix('event')->name('event.')->group(function(){
         Route::get('/', [EventController::class, 'index'])->name('index');
         Route::post('/', [EventController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [EventController::class, 'show'])->name('show');
         Route::get('/receiver', [EventController::class, 'getReceiver'])->name('getReceiver');
         Route::get('/message_template', [EventController::class, 'getMessageTemplate'])->name('getMessageTemplate');
         Route::post('/sent', [EventController::class, 'sentEvent'])->name('sentEvent');

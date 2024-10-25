@@ -42,6 +42,36 @@
             <td class="text-center">Action</td>
         </thead>
     </table>
+
+    <!-- START DETAIL MODAL -->
+        <div class="modal fade" id="detailModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailEventName"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="detailEventMessage" class="form-label">Message</label>
+                            <textarea id="detailEventMessage" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="detailReceiverPanel" class="form-label">Receiver</label>
+                            <div class="card">
+                                <div class="card-body" id="detailReceiverPanel">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- END DETAIL MODAL -->
 @endsection
 
 @push('scripts')
@@ -147,6 +177,25 @@
                 }
             }
         })
+
+        function detailEvent(id){
+            $("#detailModal").modal('show')
+            $.ajax({
+                url: "{{ url('waliby/event/show') }}/"+id,
+                method: "GET",
+                success: function(res){                    
+                    $("#detailEventName").text(res.event_name)
+                    $("#detailEventMessage").text(res.template.message)
+                    let receiver = JSON.parse(res.to)
+                    receiver.map(function(v){
+                        $("#detailReceiverPanel").append(`<span class="badge text-bg-secondary">`+v+`</span> `)
+                    })
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            })
+        }
 
         function sent(id){
             

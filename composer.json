@@ -3,10 +3,10 @@
   "description": "WA Gateway Management for Laravel",
   "type": "package",
   "require": {
-    "nesbot/carbon": "^2.72",
-    "guzzlehttp/guzzle": "^7.9",
-    "illuminate/support": "^5.0|^6.0|^7.0",
-    "yajra/laravel-datatables-oracle": "~9.0"
+    "nesbot/carbon": "*",
+    "guzzlehttp/guzzle": "*",
+    "illuminate/support": "*",
+    "yajra/laravel-datatables-oracle": "*"
   },
   "license": "MIT",
   "autoload": {
@@ -30,5 +30,5 @@
       }
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }

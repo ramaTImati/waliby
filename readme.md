@@ -58,7 +58,7 @@ public function test(){
 2. `GetEvent(array)`
    - `string` templateId => Message template id
    - `string` eventId => Event id
-3.  `SendMessage(type, endpoint, header, payload)` 
+3. `SendMessage(type, endpoint, header, payload)` 
    - `string` type => "POST" / "GET" / "PUT" / "PATCH" / "DELETE"
    - `string` endpoint => "https://example.com/example"
    - `array` header => Your request header
