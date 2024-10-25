@@ -21,7 +21,7 @@ class EventController extends BaseController {
                 ->addColumn('action', function($d){
                     $btn = '<div class="btn-group">';
                     $btn .= '<button type="button" class="btn btn-secondary" onclick="detailEvent('.$d->id.')">Show</button>';
-                    $btn .= '<button type="button" class="btn btn-primary" onclick="sent('.$d->id.')">Sent</button>';
+                    // $btn .= '<button type="button" class="btn btn-primary" onclick="sent('.$d->id.')">Sent</button>';
                     $btn .= '</div>';
                     return $btn;
                 })
@@ -54,6 +54,12 @@ class EventController extends BaseController {
                 'message' => $th->getMessage().' on line '.$th->getLine()
             ], 500);
         }
+    }
+
+    public function show($id){
+        $data = Event::with('template')->where('id', $id)->first();
+
+        return response()->json($data);
     }
 
     public function getReceiver(Request $request){

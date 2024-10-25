@@ -28,7 +28,7 @@ class WalibyServiceProvider extends ServiceProvider
         //
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'waliby');
-        $this->loadMigrationSFrom(__DIR__.'database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
     }
 
     private function publishFiles(){

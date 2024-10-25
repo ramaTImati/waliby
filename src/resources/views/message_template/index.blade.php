@@ -15,12 +15,8 @@
                 <textarea class="form-control" name="template" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
             <div class="mb-3">
-                <label for="basetable" class="form-label">Base Table</label>
-                <input type="text" name="basetable" id="basetable" class="form-control">
-            </div>
-            <div class="mb-3">
                 <ul>
-                    <li class="text-secondary"><small>Write $params$ to use dynamic messages</small></li>
+                    <li class="text-secondary"><small>Write ~params~ to use dynamic messages</small></li>
                     <li class="text-secondary">
                         <small>
                             available dynamic parameters : 
