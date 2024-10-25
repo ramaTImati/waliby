@@ -68,5 +68,5 @@ public function test(){
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](license)
 
