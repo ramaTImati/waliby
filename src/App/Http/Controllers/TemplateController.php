@@ -21,7 +21,7 @@ class TemplateController extends BaseController {
                 ->addColumn('uuid', function($d){
                     return '<span class="badge text-bg-secondary">'.$d->id.'</span>';
                 })
-                ->addColumn('action', function(){
+                ->addColumn('action', function($d){
                     $btn = '<div class="btn-group">';
                     $btn .= '<button type="button" class="btn btn-warning" onclick="edit(`'.$d->id.'`)">Edit</button>';
                     // $btn .= '<button type="button" class="btn btn-primary" onclick="sent('.$d->id.')">Sent</button>';
