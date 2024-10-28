@@ -50,6 +50,50 @@
             <td class="text-center">Action</td>
         </thead>
     </table>
+    <!-- START EDIT MODAL -->
+        <div class="modal fade" id="editModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Template</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form action="#" id="updateTemplateForm">
+                        @csrf @method('PUT')
+                        <input type="hidden" name="templateId" id="editTemplateId">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="editTemplate" class="form-label">Text</label>
+                                <textarea id="editTemplate" name="text" class="form-control"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <ul>
+                                    <li class="text-dark"><small>Write ~params~ to use dynamic messages</small></li>
+                                    <li class="text-dark">
+                                        <small>
+                                            available dynamic parameters : 
+                                            @forelse($column as $row) 
+                                                <b>{{$row}}</b>
+                                                @if(!$loop->last)
+                                                ,
+                                                @endif
+                                            @empty 
+                                                no parameters!
+                                            @endforelse
+                                        </small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="Submit" class="btn btn-primary">Update</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- END EDIT MODAL -->
 @endsection
 
 @push('scripts')
@@ -105,6 +149,63 @@
                     console.log(response);
                     $("#createField").slideUp()
                     $("#messageTemplateForm")[0].reset()
+                    table.draw()
+                    Swal.fire({
+                        title: "Success",
+                        icon: "success",
+                        text: response.message
+                    })
+                },
+                error: function(e){
+                    console.log(e);
+                    Swal.fire({
+                        title: "Error",
+                        icon: "error",
+                        text: e.message
+                    })
+                }
+            })
+        })
+
+        function edit(id){
+            $("#editModal").modal('show')
+            $.ajax({
+                url: "{{ url('waliby/templates/show') }}/"+id,
+                method: "GET",
+                success: function(res){
+                    $("#editTemplate").text(res.message)
+                    $("#editTemplateId").val(id)
+                },
+                error: function(e){
+                    console.log(e);
+                }
+            })
+        }
+
+        $("#updateTemplateForm").submit(function(event){
+            event.preventDefault()
+            let fd = new FormData(this)
+            id = $("#editTemplateId").val()
+            $.ajax({
+                url: "{{ url('waliby/templates/update/') }}/"+id,
+                method: "POST",
+                data: fd,
+                dataType: "JSON",
+                contentType: false,
+                cache: false,
+                processData: false,
+                beforeSend: function(pre){
+                    Swal.fire({
+                        title: 'Loading',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false
+                    })
+                    Swal.showLoading();
+                },
+                success: function(response){
+                    console.log(response);
+                    $("#editModal").modal('hide')
+                    $("#updateTemplateForm")[0].reset()
                     table.draw()
                     Swal.fire({
                         title: "Success",

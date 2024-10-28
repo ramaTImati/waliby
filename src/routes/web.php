@@ -16,6 +16,8 @@ Route::prefix('waliby')->name('waliby.')->middleware('web')->group(function(){
     Route::prefix('templates')->name('templates.')->group(function(){
         Route::get('/', [TemplateController::class, 'index'])->name('index');
         Route::post('/', [TemplateController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [TemplateController::class, 'show'])->name('show');
+        Route::put('/update/{id}', [TemplateController::class, 'update'])->name('update');
     });
 
     Route::prefix('event')->name('event.')->group(function(){
