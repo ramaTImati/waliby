@@ -25,9 +25,11 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 This package required base table or database view that contain phone number and name !\
 .env `required`
 ```php
-WALIBY_PHONE_BOOK=your table or view
+WALIBY_PHONE_BOOK=your table or database view
 WALIBY_PHONE_NUMBER_COLUMN=
 WALIBY_NAME_COLUMN=
+WALIBY_WEBHOOK_MESSAGE_ID_KEY=id
+WALIBY_WEBHOOK_STATUS_KEY=status
 ```
 
 If you want to customize view, simply publish blade template from this package. Published file located in `resource/views/vendor/Waliby`

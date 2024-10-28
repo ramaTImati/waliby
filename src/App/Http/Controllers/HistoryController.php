@@ -24,12 +24,8 @@ class HistoryController extends BaseController {
     public function statsUpdate(Request $request){
         $content = json_decode(file_get_contents('php://input'), true);
 
-        $messageId = $content['id'];
-        $status = $content['status'];
-        $phone = $content['phone'];
-        $note = $content['note'];
-        $sender = $content['sender'];
-        $deviceId = $content['deviceId'];
+        $messageId = $content[config('waliby.webhookMessageId')];
+        $status = $content[config('waliby.webhookStatus')];
 
         try {
             History::where('message_id', $messageId)->where('phone_number', $phone)->update([
