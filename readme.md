@@ -98,13 +98,17 @@ This function use to store message history from `SendMessage` function response
             'message_id' => 'e11e7377-ac7a-405e-b520-16dd1f22f204',
             'phone_number' => '62898xxx...',
             'message_text' => 'test',
-            'status' => 'pending'
+            'status' => 'pending',
+            'created_at' => new dateTime,
+            'updated_at' => new dateTime,
          ],
          [
             'message_id' => 'ce947524-c641-4c54-90b5-9eb3b714a3fe',
             'phone_number' => '62858xxx...',
             'message_text' => 'test',
-            'status' => 'pending'
+            'status' => 'pending',
+            'created_at' => new dateTime,
+            'updated_at' => new dateTime,
          ],
       ]
       ```
