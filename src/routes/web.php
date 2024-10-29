@@ -31,6 +31,7 @@ Route::prefix('waliby')->name('waliby.')->middleware('web')->group(function(){
 
     Route::prefix('history')->name('history.')->group(function(){
         Route::get('/', [HistoryController::class, 'index'])->name('index');
-        Route::match(['GET', 'POST'], 'stats', [HistoryController::class, 'statsUpdate']);
     });
 });
+
+Route::match(['GET', 'POST'], '/api/waliby/history/stats', [HistoryController::class, 'statsUpdate']);

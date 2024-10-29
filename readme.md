@@ -8,6 +8,10 @@ Laravel > 5.8
 
 ```bash
 composer require ramatimati/waliby
+
+# or join the development program
+
+composer require ramatimati/waliby:dev-main
 ```
 
 #### Runing Migration
@@ -50,7 +54,7 @@ https://example.com/waliby/history
 #### Webhook
 Waliby stores all activity on SendMessage function and included webhook url. Use this url to set webhook for updating message status. This url support `POST` or `GET` method
 ```php
-https://example.com/waliby/history/stats
+https://example.com/api/waliby/history/stats
 ```
 
 ## Usage
@@ -66,18 +70,44 @@ public function test(){
 ```
 
 #### Available Method
-1. `GetMessage(array)`
+1. `GetMessage($array)`
+This function use to get message template base from `https://example.com/waliby/templates`
    - `string` templateId => Message template id
    - `string` phoneNumber => Receiver phone number
-2. `GetEvent(array)`
+2. `GetEvent($array)`
+Under Construction
    - `string` templateId => Message template id
    - `string` eventId => Event id
-3. `SendMessage(type, endpoint, header, payload)` 
+3. `SendMessage($type, $endpoint, $header, $payload)` 
+This function support single and multiple send message
    - `string` type => "POST" / "GET" / "PUT" / "PATCH" / "DELETE"
    - `string` endpoint => "https://example.com/example"
    - `array` header => Your request header
    - `array` payload => Your request payload 
-
+4. `History($params)`
+This function use to store message history from `SendMessage` function response
+   - `array` params => array must contain some keys `message_id`, `phone_number`, `message_text`, `status`
+      - `message_id` => required
+      - `phone_number` => required
+      - `message_text` => optional
+      - `status` => required
+   - If you want to store multiple, simply write multidimensional array like this
+      ```php
+      $params = [
+         [
+            'message_id' => 'e11e7377-ac7a-405e-b520-16dd1f22f204',
+            'phone_number' => '62898xxx...',
+            'message_text' => 'test',
+            'status' => 'pending'
+         ],
+         [
+            'message_id' => 'ce947524-c641-4c54-90b5-9eb3b714a3fe',
+            'phone_number' => '62858xxx...',
+            'message_text' => 'test',
+            'status' => 'pending'
+         ],
+      ]
+      ```
 
 
 ## License

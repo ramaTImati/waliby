@@ -15,10 +15,10 @@ class CreateMessageHistoriesTable extends Migration
     {
         //
         Schema::create('waliby_message_histories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->uuid('message_id');
+            $table->bigIncrements('id');
+            $table->string('message_id');
             $table->string('phone_number');
-            $table->text('message_text');
+            $table->text('message_text')->nullable();
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
