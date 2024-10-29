@@ -118,11 +118,19 @@ class Waliby {
         try {
             DB::beginTransaction();
 
-            $data = History::createMany($params);
+            $data = History::insert($params);
 
             DB::commit();
+            return response()->json([
+                'code' => 200,
+                'message' => 'success'
+            ]);
         } catch (\Throwable $th) {
             DB::rollback();
+            return response()->json([
+                'code' => 500,
+                'message' => $th->getMessage().' on line '.$th->getLine()
+            ]);
         }
     }
 }
