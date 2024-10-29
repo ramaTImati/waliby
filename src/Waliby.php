@@ -109,17 +109,20 @@ class Waliby {
         ]);
 
         $response = $request->getBody()->getContents();
-        $response = json_decode($response);
-        $data = $response->data->messages;
-        foreach ($data as $key => $value) {
-            History::create([
-                'message_id' => $value->id,
-                'phone_number' => $value->phone,
-                'message_text' => $value->message,
-                'status' => $value->status,
-            ]);
-        }
+        $response = json_decode($response, true);
 
         return response()->json($response);
+    }
+
+    public static function StoreHistory(array $params){
+        try {
+            DB::beginTransaction();
+
+            $data = History::createMany($params);
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+        }
     }
 }
