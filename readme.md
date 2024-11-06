@@ -72,8 +72,8 @@ public function test(){
 #### Available Method
 1. `GetMessage($array)`
 This function use to get message template base from `https://example.com/waliby/templates`
-   - `string` templateId => Message template id
-   - `string` phoneNumber => Receiver phone number
+   - `string` templateName => Unique message template name
+   - `array` phoneNumber => Receiver phone number. example ['0823xxxx....', '0853xxxx....']
 2. `GetEvent($array)`
 Under Construction
    - `string` templateId => Message template id

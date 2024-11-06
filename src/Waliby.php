@@ -16,7 +16,7 @@ class Waliby {
     }
 
     public static function GetMessage(array $params){
-        $id = $params['templateId'];
+        $name = $params['templateName'];
         $phoneNumber = $params['phoneNumber'];
 
         $table = config('waliby.phoneBookTable');
@@ -25,30 +25,33 @@ class Waliby {
         $nameColumn =config('waliby.nameColumn');
 
         $data = DB::table($table)
-            ->where($phoneNumberColumn, $phoneNumber)
-            ->first();
+            ->whereIn($phoneNumberColumn, $phoneNumber)
+            ->get();
         
         try {
-            $template = MessageTemplate::where('id', $id)->first();
-
-            $message = $template->message;
-            preg_match_all('/~(.*?)~/', $template->message, $matches);
-            foreach ($matches[1] as $kpreg => $preg) {
-                if (in_array($preg, $column)) {
-                    $message = str_replace('~'.$preg.'~', $data->$preg, $message);
+            $template = MessageTemplate::where('name', $name)->first();
+            $result = [];
+            foreach ($data as $key => $value) {
+                $message = $template->message;
+                preg_match_all('/~(.*?)~/', $template->message, $matches);
+                foreach ($matches[1] as $kpreg => $preg) {
+                    if (in_array($preg, $column)) {
+                        $message = str_replace('~'.$preg.'~', $value->$preg, $message);
+                    }
+                    if ($preg == 'date') {
+                        $message = str_replace('~'.$preg.'~', Carbon::now()->format('d F Y'), $message);
+                    }
                 }
-                if ($preg == 'date') {
-                    $message = str_replace('~'.$preg.'~', Carbon::now()->format('d F Y'), $message);
-                }
+                $result[$key]['phoneNumber'] = $value->$phoneNumberColumn;
+                $result[$key]['message'] = $message;
             }
 
-            $result = [
-                'templateId' => $id,
-                'phoneNumber' => $phoneNumber,
-                'message' => $message
+            $final = [
+                'templateName' => $name,
+                'data' => $result
             ];
 
-            return $result;
+            return $final;
         } catch (\Throwable $th) {
             return response()->json([
                 'code' => 500,
