@@ -117,6 +117,7 @@
             columns: [
                 {data: 'DT_RowIndex'},
                 {data: 'uuid'},
+                {data: 'name'},
                 {data: 'message'},
                 {data: 'created_by'},
                 {data: 'action', orderable: false, searchable: false}
