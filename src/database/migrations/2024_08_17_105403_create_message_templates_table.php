@@ -16,7 +16,7 @@ class CreateMessageTemplatesTable extends Migration
         //
         Schema::create('waliby_message_templates', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->text('message');
             $table->string('created_by')->nullable();
             $table->timestamps();
