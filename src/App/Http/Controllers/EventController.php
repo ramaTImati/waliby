@@ -94,7 +94,7 @@ class EventController extends BaseController {
         $result = [];
         foreach ($data as $key => $value) {
             $result[$key]['id'] = $value->id;
-            $result[$key]['text'] = $value->message;
+            $result[$key]['text'] = $value->name.' ('.$value->message.')';
         }
         $result = array_values($result);
         return response()->json($result);
