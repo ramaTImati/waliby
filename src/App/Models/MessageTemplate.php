@@ -11,6 +11,6 @@ class MessageTemplate extends Model {
     protected $table = 'waliby_message_templates';
     public $incrementing = false;
     public $fillable = [
-        'id', 'message', 'created_by'
+        'id', 'name', 'message', 'created_by'
     ];
 }

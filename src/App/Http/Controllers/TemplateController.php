@@ -38,6 +38,7 @@ class TemplateController extends BaseController {
         try {
             MessageTemplate::create([
                 'id' => Str::uuid(),
+                'name' => $request->name,
                 'message' => $request->template,
                 'created_by' => 1
             ]);

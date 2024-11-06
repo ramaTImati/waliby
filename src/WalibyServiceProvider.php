@@ -38,8 +38,8 @@ class WalibyServiceProvider extends ServiceProvider
             __DIR__.'/resources/views' => base_path('resources/views/vendor/'.$publishTag),
         ], $publishTag);
 
-        $this->publishes([
-             __DIR__.'/App/Http/Controllers/HistoryController.php' => base_path('app/Http/Controllers/vendor/Waliby/HistoryController.php')
-        ], $publishTag);
+        // $this->publishes([
+        //      __DIR__.'/App/Http/Controllers/HistoryController.php' => base_path('app/Http/Controllers/vendor/Waliby/HistoryController.php')
+        // ], $publishTag);
     }
 }

@@ -11,6 +11,10 @@
         <form action="#" id="messageTemplateForm">
             @csrf
             <div class="mb-3">
+                <label for="name" class="form-label">Template Name</label>
+                <input type="text" name="name" id="name" class="form-control">
+            </div>
+            <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Message Template</label>
                 <textarea class="form-control" name="template" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
@@ -45,6 +49,7 @@
         <thead>
             <td class="text-center">#</td>
             <td class="text-center">Id</td>
+            <td class="text-center">Name</td>
             <td class="text-center">Text</td>
             <td class="text-center">Created By</td>
             <td class="text-center">Action</td>
