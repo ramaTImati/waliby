@@ -2,6 +2,7 @@
 
 namespace Ramatimati\Waliby\App\Http\Controllers;
 
+use Ramatimati\Waliby\App\Http\Requests\EventPostRequest;
 use Illuminate\Routing\Controller as BaseController;
 use Ramatimati\Waliby\App\Models\MessageTemplate;
 use Yajra\DataTables\Facades\DataTables;
@@ -31,7 +32,8 @@ class EventController extends BaseController {
         return view('waliby::event.index');
     }
 
-    public function store(Request $request){
+    public function store(EventPostRequest $request){
+        $req = $request->validated();
         try {
             DB::beginTransaction();
 
