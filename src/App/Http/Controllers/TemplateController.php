@@ -2,12 +2,14 @@
 
 namespace Ramatimati\Waliby\App\Http\Controllers;
 
+use Ramatimati\Waliby\App\Http\Requests\TemplateUpdateRequest;
+use Ramatimati\Waliby\App\Http\Requests\TemplatePostRequest;
 use Illuminate\Routing\Controller as BaseController;
 use Ramatimati\Waliby\App\Models\MessageTemplate;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class TemplateController extends BaseController {
     public function index(Request $request){
@@ -34,12 +36,14 @@ class TemplateController extends BaseController {
         return view('waliby::message_template.index', compact('column'));
     }
 
-    public function store(Request $request){
+    public function store(TemplatePostRequest $request){
+        $req = $request->validated();
+
         try {
             MessageTemplate::create([
                 'id' => Str::uuid(),
-                'name' => $request->name,
-                'message' => $request->template,
+                'name' => $req['name'],
+                'message' => $req['template'],
                 'created_by' => 1
             ]);
 
@@ -68,12 +72,14 @@ class TemplateController extends BaseController {
         }
     }
 
-    public function update($id, Request $request){
+    public function update($id, TemplateUpdateRequest $request){
+        $req = $request->validated();
+
         try {
             DB::beginTransaction();
 
-            $data = MessageTemplate::where('id', $request->templateId)->update([
-                'message' => $request->text
+            $data = MessageTemplate::where('id', $req['templateId'])->update([
+                'message' => $req['text']
             ]);
 
             DB::commit();

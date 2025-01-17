@@ -152,7 +152,6 @@
                     Swal.showLoading();
                 },
                 success: function(response){
-                    console.log(response);
                     $("#createField").slideUp()
                     $("#messageTemplateForm")[0].reset()
                     table.draw()
@@ -163,11 +162,10 @@
                     })
                 },
                 error: function(e){
-                    console.log(e);
                     Swal.fire({
                         title: "Error",
                         icon: "error",
-                        text: e.message
+                        text: e.responseJSON.message
                     })
                 }
             })
@@ -183,7 +181,7 @@
                     $("#editTemplateId").val(id)
                 },
                 error: function(e){
-                    console.log(e);
+
                 }
             })
         }
@@ -209,7 +207,6 @@
                     Swal.showLoading();
                 },
                 success: function(response){
-                    console.log(response);
                     $("#editModal").modal('hide')
                     $("#updateTemplateForm")[0].reset()
                     table.draw()
@@ -220,11 +217,10 @@
                     })
                 },
                 error: function(e){
-                    console.log(e);
                     Swal.fire({
                         title: "Error",
                         icon: "error",
-                        text: e.message
+                        text: e.responseJSON.message
                     })
                 }
             })
