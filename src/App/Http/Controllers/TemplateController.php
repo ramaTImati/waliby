@@ -43,8 +43,7 @@ class TemplateController extends BaseController {
             MessageTemplate::create([
                 'id' => Str::uuid(),
                 'name' => $req['name'],
-                'message' => $req['template'],
-                'created_by' => 1
+                'message' => $req['template']
             ]);
 
             return response()->json([

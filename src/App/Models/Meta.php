@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageTemplate extends Model {
+class Meta extends Model
+{
     use HasFactory, SoftDeletes;
 
-    protected $table = 'waliby_message_templates';
-    public $incrementing = false;
+    protected $table = 'waliby_meta';
     public $fillable = [
-        'id', 'name', 'message'
+        'name', 'value'
     ];
 }

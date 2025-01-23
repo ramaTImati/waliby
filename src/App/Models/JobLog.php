@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageTemplate extends Model {
+class JobLog extends Model
+{
     use HasFactory, SoftDeletes;
 
-    protected $table = 'waliby_message_templates';
-    public $incrementing = false;
+    protected $table = 'waliby_job_logs';
     public $fillable = [
-        'id', 'name', 'message'
+        'job_id', 'reserved_at', 'finished_at', 'status', 'exception'
     ];
 }

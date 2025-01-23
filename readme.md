@@ -29,6 +29,7 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 This package required base table or database view that contain phone number and name !\
 .env `required`
 ```php
+# WALIBY PHONE BOOK PARAMS
 WALIBY_PHONE_BOOK=your table or database view
 WALIBY_PHONE_NUMBER_COLUMN=
 WALIBY_NAME_COLUMN=

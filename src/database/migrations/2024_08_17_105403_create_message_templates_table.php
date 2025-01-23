@@ -18,7 +18,6 @@ class CreateMessageTemplatesTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->unique();
             $table->text('message');
-            $table->string('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

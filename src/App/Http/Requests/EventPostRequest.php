@@ -23,8 +23,11 @@ class EventPostRequest extends FormRequest
     {
         return [
             'eventname' => ['required', 'string'],
-            'messageTemplate' => ['required', 'string'],
-            'receiver' => ['required', 'array'],
+            'eventType' => ['required', 'string'],
+            'messageTemplate' => ['required', 'string', 'exists:waliby_message_templates,id'],
+            'receiverParams' => ['required', 'string'],
+            'scheduledEvery' => ['required_if:eventType,recurring'],
+            'scheduledAt' => ['required_if:eventType,recurring', 'max:28']
         ];
     }
 
@@ -33,10 +36,16 @@ class EventPostRequest extends FormRequest
         return [
             'eventname.required' => 'Event name is required',
             'eventname.string' => 'Event name must be a string',
+            'eventType.required' => 'Event type is required',
+            'eventType.string' => 'Event type must be a string',
             'messageTemplate.required' => 'Message template is required',
             'messageTemplate.string' => 'Message template must be a string',
-            'receiver.required' => 'Receiver is required',
-            'receiver.array' => 'Receiver must be an array',
+            'messageTemplate.exists' => 'Message template not found',
+            'receiverParams.required' => 'Receiver is required',
+            'receiverParams.string' => 'Receiver must be a string',
+            'scheduledEvery.required_if' => 'Scheduled Every is required',
+            'scheduledAt.required_if' => 'Scheduled At is required',
+            'scheduledAt.max' => 'Scheduled At must less or equal than 28',
         ];
     }
 }
