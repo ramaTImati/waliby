@@ -15,11 +15,15 @@ class CreateEventsTable extends Migration
     {
         //
         Schema::create('waliby_events', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('event_name');
+            $table->enum('event_type', ['manual', 'recurring']);
             $table->uuid('message_template_id');
-            $table->text('to');
-            $table->string('event_status');
+            $table->foreign('message_template_id')->references('id')->on('waliby_message_templates')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->text('receiver_params');
+            $table->datetime('last_processed')->nullable();
+            $table->enum('scheduled_every', ['daily', 'weekly', 'monthly', 'yearly'])->nullable();
+            $table->integer('scheduled_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +36,6 @@ class CreateEventsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('waliby_message_histories');
+        Schema::dropIfExists('waliby_events');
     }
 }

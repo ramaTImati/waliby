@@ -21,8 +21,31 @@
                 <select name="messageTemplate" id="messageTemplate" class="form-control"></select>
             </div>
             <div class="mb-3">
-                <label for="receiver" class="form-label">Receiver</label>
-                <select name="receiver[]" id="selectReceiver" class="form-control"></select>
+                <label for="selectReceiver" class="form-label">Receiver Parameters</label>
+                <select name="receiverParams" id="selectReceiver" class="form-control"></select>
+            </div>
+            <div class="mb-3">
+                <label for="eventType" class="form-label">Event Type</label>
+                <select name="eventType" id="eventType" class="form-select" required>
+                    <option value="manual" selected>Manually</option>
+                    <option value="recurring">Recurring</option>
+                </select>
+            </div>
+            <div class="row mb-3" id="recurringType">
+                <div class="col-md-6">
+                    <label for="scheduledEvery" class="form-label">Scheduled Every</label>
+                    <select name="scheduledEvery" id="scheduledEvery" class="form-select">
+                        <option value=""hidden readonly disable>--- Select ---</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="scheduledAt" class="form-label">Scheduled At <small class="text-muted" id="scheduledAtDesc"></small></label>
+                    <input type="number" name="scheduledAt" id="scheduledAt" class="form-control">
+                </div>
             </div>
             <div class="row">
                 <div class="col">
@@ -38,7 +61,7 @@
             <td class="text-center">#</td>
             <td class="text-center">Event Name</td>
             <td class="text-center">Message Template Id</td>
-            <td class="text-center">Event Status</td>
+            <td class="text-center">Last Processed</td>
             <td class="text-center">Action</td>
         </thead>
     </table>
@@ -55,6 +78,10 @@
                         <div class="mb-3">
                             <label for="detailEventMessage" class="form-label">Message</label>
                             <textarea id="detailEventMessage" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="detailReceiverParams" class="form-label">Parameters</label>
+                            <textarea id="detailReceiverParams" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="detailReceiverPanel" class="form-label">Receiver</label>
@@ -81,18 +108,21 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function(){
-
+            let eventType = $("#eventType").val()
+            if (eventType == 'manual') {
+                $("#recurringType").slideUp()
+            }
         })
 
         let table = $("#table").DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('waliby.event.index') }}',
+            ajax: '{{ route('waliby.events.index') }}',
             columns: [
                 {data: 'DT_RowIndex'},
                 {data: 'event_name'},
-                {data: 'message_template_id'},
-                {data: 'event_status'},
+                {data: 'template.message'},
+                {data: 'last_processed'},
                 {data: 'action', orderable: false, searchable: false}
             ]
         })
@@ -109,7 +139,7 @@
             event.preventDefault()
             let fd = new FormData(this)
             $.ajax({
-                url: "{{ route('waliby.event.store') }}",
+                url: "{{ route('waliby.events.store') }}",
                 method: "POST",
                 data: fd,
                 dataType: "JSON",
@@ -127,6 +157,9 @@
                 success: function(response){
                     console.log(response);
                     $("#createField").slideUp()
+                    $("#recurringType").slideUp()
+                    $("#selectReceiver").val('').trigger('change')
+                    $("#messageTemplate").val('').trigger('change')
                     $("#messageEventForm")[0].reset()
                     table.draw()
                     Swal.fire({
@@ -140,7 +173,7 @@
                     Swal.fire({
                         title: "Error",
                         icon: "error",
-                        text: e.message
+                        text: e.responseJSON.message
                     })
                 }
             })
@@ -148,13 +181,14 @@
 
         $("#selectReceiver").select2({
             theme: "bootstrap-5",
-            placeholder: "--- Select Receiver ---",
+            placeholder: "--- Select Receiver Parameters ---",
+            minimumResultsForSearch: Infinity,
+            maximumInputLength: 0,
             allowClear: true,
-            multiple: true,
             width: "100%",
-            closeOnSelect: false,
+            closeOnSelect: true,
             ajax: {
-                url: "{{ route('waliby.event.getReceiver') }}",
+                url: "{{ route('waliby.events.getReceiver') }}",
                 processResults: function(data){
                     return {
                         results: data
@@ -169,7 +203,7 @@
             allowClear: true,
             width: "100%",
             ajax: {
-                url: "{{ route('waliby.event.getMessageTemplate') }}",
+                url: "{{ route('waliby.events.getMessageTemplate') }}",
                 processResults: function(data){
                     return {
                         results: data
@@ -181,14 +215,16 @@
         function detailEvent(id){
             $("#detailModal").modal('show')
             $.ajax({
-                url: "{{ url('waliby/event/show') }}/"+id,
+                url: "{{ url('waliby/events/show') }}/"+id,
                 method: "GET",
                 success: function(res){                    
                     $("#detailEventName").text(res.event_name)
-                    $("#detailEventMessage").text(res.template.message)
-                    let receiver = JSON.parse(res.to)
+                    $("#detailEventMessage").text(res.message)
+                    $("#detailReceiverParams").text(res.parameters)
+                    let receiver = res.receiver
+                    
                     receiver.map(function(v){
-                        $("#detailReceiverPanel").append(`<span class="badge text-bg-secondary">`+v+`</span> `)
+                        $("#detailReceiverPanel").append(`<span class="badge text-bg-secondary">`+v.name+`</span> `)
                     })
                 },
                 error: function(e){
@@ -197,8 +233,30 @@
             })
         }
 
-        function sent(id){
-            
-        }
+        $("#scheduledEvery").change(function(){
+            value = $(this).val()
+            if (value == 'daily') {
+                $("#scheduledAtDesc").text('24 hours format')
+                $("#scheduledAt").attr({"min":1,"max":24})
+            }else if(value == 'weekly'){
+                $("#scheduledAtDesc").text('7 days of week')
+                $("#scheduledAt").attr({"min":1,"max":7})
+            }else if(value == 'monthly'){
+                $("#scheduledAtDesc").text('')
+                $("#scheduledAt").attr({"min":1,"max":28})
+            }else if(value == 'yearly'){
+                $("#scheduledAtDesc").text('12 month of year')
+                $("#scheduledAt").attr({"min":1,"max":12})
+            }
+        })
+
+        $("#eventType").change(function(){
+            value = $(this).val()
+            if (value == 'recurring') {
+                $("#recurringType").slideDown()
+            }else{
+                $("#recurringType").slideUp()
+            }
+        })
     </script>
 @endpush

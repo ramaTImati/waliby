@@ -51,7 +51,6 @@
             <td class="text-center">Id</td>
             <td class="text-center">Name</td>
             <td class="text-center">Text</td>
-            <td class="text-center">Created By</td>
             <td class="text-center">Action</td>
         </thead>
     </table>
@@ -119,7 +118,6 @@
                 {data: 'uuid'},
                 {data: 'name'},
                 {data: 'message'},
-                {data: 'created_by'},
                 {data: 'action', orderable: false, searchable: false}
             ]
         })

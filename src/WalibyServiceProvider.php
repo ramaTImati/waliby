@@ -2,7 +2,9 @@
 
 namespace Ramatimati\Waliby;
 
+use Ramatimati\Waliby\Console\SendWA;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 
 class WalibyServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,18 @@ class WalibyServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         $this->loadViewsFrom(__DIR__.'/resources/views', 'waliby');
         $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                SendWA::class,
+            ]);
+
+            $this->app->booted(function () {
+                $schedule = $this->app->make(Schedule::class);
+                // $schedule->command('waliby:send-wa')->hourlyAt(7);
+                $schedule->command('waliby:send-wa')->everyMinute();
+            });
+        }
     }
 
     private function publishFiles(){
@@ -37,9 +51,5 @@ class WalibyServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/resources/views' => base_path('resources/views/vendor/'.$publishTag),
         ], $publishTag);
-
-        // $this->publishes([
-        //      __DIR__.'/App/Http/Controllers/HistoryController.php' => base_path('app/Http/Controllers/vendor/Waliby/HistoryController.php')
-        // ], $publishTag);
     }
 }
