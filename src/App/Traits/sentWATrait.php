@@ -11,25 +11,9 @@ use Carbon\Carbon;
 
 trait sentWATrait{
     public function send($event_id){
-        // $requestFormat = $this->processData($event_id);
-        // $response = {\"detail\":\"success! message in queue\",\"id\":[\"77972228\",\"77972229\"],\"process\":\"pending\",\"status\":true,\"target\":[\"082315535393\",\"081232575808\"]};
-        $response = [
-            'detail' => 'success! message in queue',
-            'id' => [
-                '77972228','77972229'
-            ],
-            'process' => 'pending',
-            'status' => true,
-            'target' => [
-                '082315535393', '081232575808'
-            ]
-        ];
-        $response = json_encode($response);
-        // $response_nested = '{"status":"ok","data":[{"id":"35353636367575fhr884","status":"sent"},{"id":"3EB054404829B8FB5D77","status":"sent"}]}';
-        $history = $this->storeHistory($response);
-        return $history;
         $endpoint = config('waliby.endpoint');
 
+        $requestFormat = $this->processData($event_id);
         if ($requestFormat['code'] == 200) {
             $client = new Client();
             $request = $client->post($endpoint, [
@@ -38,12 +22,18 @@ trait sentWATrait{
             ]);
     
             $response = $request->getBody()->getContents();
-            $response = json_decode($response, true);
+            $response = $this->storeHistory($response);
+            $code = 200;
+            $message = $response;
         }else{
+            $code = 500;
             $response = 'request format not supported';
         }
 
-        return response()->json($response);
+        return response()->json([
+            'code' => $code,
+            'message' => $message
+        ], $code);
     }
 
     private function processData($event_id){
@@ -134,20 +124,17 @@ trait sentWATrait{
                     }else{
                         $dynamic = 'memek';
                     }
-                    $keyValue = str_replace('@array@', '', $explode[0]);
-                    $keyValue = str_replace('@string@', '', $explode[0]);
+                    $keyValue = str_replace('#array#', '', $explode[0]);
+                    $keyValue = str_replace('#string#', '', $explode[0]);
                     $body[$key][$keyValue] = $dynamic;
                 }
             }
-            if (str_contains($checkNested[1], '@array@')) {
+            if (str_contains($checkNested[1], '#array#')) {
                 $code = 200;
                 $bodyFormat = [str_replace('=', '', $checkNested[0]) => $body];
-            }elseif (str_contains($checkNested[1], '@string@')) {
+            }elseif (str_contains($checkNested[1], '#string#')) {
                 $code = 200;
-                // $res = implode(',', $body);
                 $res = json_encode($body,JSON_UNESCAPED_SLASHES);
-                // return $res;
-                // $res = echo $res;
                 $bodyFormat = [str_replace('=', '', $checkNested[0]) => $res];
             }else{
                 $code = 500;
@@ -169,11 +156,8 @@ trait sentWATrait{
     }
 
     private function storeHistory($response){
-        // return $response;
         $fetchFormat = Meta::where('name', 'RESPONSE')->first();
         $format = json_decode($fetchFormat->value, true);
-
-        // return $format;
 
         $responseType = '';
         $resParent = '';
@@ -188,11 +172,11 @@ trait sentWATrait{
                         $resParent = $karray;
                         foreach ($varray as $kchild => $vchild) {
                             $responseType = 'hasChild';
-                            if($vchild == '@id@'){
+                            if($vchild == '~id~'){
                                 $resId = $kchild;
-                            }elseif ($vchild == '@phoneNumber@') {
+                            }elseif ($vchild == '~phoneNumber~') {
                                 $resPhoneNumber = $kchild;
-                            }elseif ($vchild == '@status@') {
+                            }elseif ($vchild == '~status~') {
                                 $resStatus = $kchild;
                             }
                         }
@@ -200,13 +184,13 @@ trait sentWATrait{
                         return 'api response not supported by waliby';
                     }
                 }
-            }elseif ($value == '@id@') {
+            }elseif ($value == '~id~') {
                 $responseType = 'single';
                 $resId = $key;
-            }elseif ($value == '@phoneNumber@') {
+            }elseif ($value == '~phoneNumber~') {
                 $responseType = 'single';
                 $resPhoneNumber = $key;
-            }elseif ($value == '@status@') {
+            }elseif ($value == '~status~') {
                 $responseType = 'single';
                 $resStatus = $key;
             }
@@ -246,17 +230,10 @@ trait sentWATrait{
             Waliby::StoreHistory($responseValue);
 
             DB::commit();
-            return response()->json([
-                'code' => 200,
-                'message' => 'sent and stored'
-            ], 200);
+            return 'sent and stored';
         } catch (\Throwable $th) {
             DB::rollback();
-            return response()->json([
-                'code' => 500,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-        
+            return $th->getMessage();
+        }   
     }
 }

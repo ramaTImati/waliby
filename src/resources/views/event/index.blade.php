@@ -223,6 +223,7 @@
                     $("#detailReceiverParams").text(res.parameters)
                     let receiver = res.receiver
                     
+                    $("#detailReceiverPanel").empty()
                     receiver.map(function(v){
                         $("#detailReceiverPanel").append(`<span class="badge text-bg-secondary">`+v.name+`</span> `)
                     })
@@ -258,5 +259,75 @@
                 $("#recurringType").slideUp()
             }
         })
+
+        function sentEvent(id){
+            $.ajax({
+                url: "{{ url('waliby/events/sentManually') }}/"+id,
+                method: "POST",
+                data: {
+                    '_token' : "{{ csrf_token() }}"
+                },
+                beforeSend: function(pre){
+                    Swal.fire({
+                        title: 'Loading',
+                        allowEscapeKey: false,
+                        allowOutsideClick: false
+                    })
+                    Swal.showLoading();
+                },
+                success: function(response){
+                    Swal.fire({
+                        title: "Success",
+                        icon: "success",
+                        text: response.message
+                    })
+                },
+                error: function(e){
+                    console.log(e);
+                    Swal.fire({
+                        title: "Error",
+                        icon: "error",
+                        text: e.responseJSON.message
+                    })
+                }
+            })
+        }
+
+        function deleteEvent(id){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('waliby/events/destroy') }}/"+id,
+                        type: 'DELETE',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(res) {
+                            table.draw()
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: res.message,
+                                icon: "success"
+                            });
+                        },
+                        error: function(e){
+                            Swal.fire({
+                                title: "Error",
+                                text: e.responseJSON.message,
+                                icon: "error"
+                            });
+                        }
+                    })
+                }
+            })
+        }
     </script>
 @endpush
