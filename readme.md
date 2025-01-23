@@ -20,9 +20,11 @@ php artisan migrate
 ```
 or you can specific run migration of this package
 ``` bash
+php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105350_create_waliby_metas_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105403_create_message_templates_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105510_create_message_histories_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105515_create_events_table.php
+php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105555_job_logs_table.php
 ```
 
 ## Configuration
@@ -33,6 +35,13 @@ This package required base table or database view that contain phone number and 
 WALIBY_PHONE_BOOK=your table or database view
 WALIBY_PHONE_NUMBER_COLUMN=
 WALIBY_NAME_COLUMN=
+WALIBY_COLUMN_CONDITION_NAME_1=gender
+WALIBY_COLUMN_CONDITION_NAME_2=faculty
+WALIBY_COLUMN_CONDITION_NAME_3=class
+
+# WALIBY WA GATEWAY
+WALIBY_AUTH_TOKEN=u1PxBCwJXf9b2-UJ4m1M
+WALIBY_ENDPOINT_BULK_MESSAGE=https://api.fonnte.com/send
 WALIBY_WEBHOOK_MESSAGE_ID_KEY=id
 WALIBY_WEBHOOK_STATUS_KEY=status
 ```
@@ -48,7 +57,7 @@ Waliby included some routes
 
 ```php
 https://example.com/waliby/templates
-https://example.com/waliby/event
+https://example.com/waliby/events
 https://example.com/waliby/history
 ```
 

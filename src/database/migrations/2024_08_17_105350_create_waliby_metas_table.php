@@ -4,14 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateWalibyMetasTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('waliby_meta', function (Blueprint $table) {
+        Schema::create('waliby_metas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
             $table->text('value');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waliby_meta');
+        Schema::dropIfExists('waliby_metas');
     }
 };
