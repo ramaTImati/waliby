@@ -56,6 +56,7 @@ php artisan vendor:publish --tag=Waliby
 Waliby included some routes
 
 ```php
+https://example.com/waliby/metas
 https://example.com/waliby/templates
 https://example.com/waliby/events
 https://example.com/waliby/history
@@ -78,23 +79,21 @@ public function test(){
    Waliby::SendMessage(type, endpoint, header, payload)
 }
 ```
+#### Task Scheduling
+Waliby come with built in task scheduling every hour at 7, you can configure at *Waliby Event*, make sure you have configure cron job in your apllication
 
 #### Available Method
 1. `GetMessage($array)`
 This function use to get message template base from `https://example.com/waliby/templates`
    - `string` templateName => Unique message template name
    - `array` phoneNumber => Receiver phone number. example ['0823xxxx....', '0853xxxx....']
-2. `GetEvent($array)`
-Under Construction
-   - `string` templateId => Message template id
-   - `string` eventId => Event id
-3. `SendMessage($type, $endpoint, $header, $payload)` 
+2. `SendMessage($type, $endpoint, $header, $payload)` 
 This function support single and multiple send message
    - `string` type => "POST" / "GET" / "PUT" / "PATCH" / "DELETE"
    - `string` endpoint => "https://example.com/example"
    - `array` header => Your request header
    - `array` payload => Your request payload 
-4. `History($params)`
+3. `History($params)`
 This function use to store message history from `SendMessage` function response
    - `array` params => array must contain some keys `message_id`, `phone_number`, `message_text`, `status`
       - `message_id` => required

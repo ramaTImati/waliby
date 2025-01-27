@@ -25,8 +25,8 @@ class TemplateController extends BaseController {
                 })
                 ->addColumn('action', function($d){
                     $btn = '<div class="btn-group">';
-                    $btn .= '<button type="button" class="btn btn-warning" onclick="edit(`'.$d->id.'`)">Edit</button>';
-                    // $btn .= '<button type="button" class="btn btn-primary" onclick="sent('.$d->id.')">Sent</button>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-warning" onclick="edit(`'.$d->id.'`)">Edit</button>';
+                    $btn .= '<button type="button" class="btn btn-sm btn-danger" onclick="deleteTemplate(`'.$d->id.'`)">Delete</button>';
                     $btn .= '</div>';
                     return $btn;
                 })
@@ -92,6 +92,22 @@ class TemplateController extends BaseController {
                 'code' => 500,
                 'message' => $th->getMessage().' on line '.$th->getLine()
             ], 500);
+        }
+    }
+
+    public function destroy($id){
+        try {
+            $data = MessageTemplate::find($id)->delete();
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'data deleted'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'code' => 500,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

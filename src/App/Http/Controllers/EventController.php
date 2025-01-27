@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 class EventController extends BaseController {
 
     use sentWATrait;
+
     public function index(Request $request){
         if ($request->ajax()) {
             $data = Event::with('template')->get();
@@ -93,7 +94,12 @@ class EventController extends BaseController {
             'event_name' => $data->event_name,
             'message' => $data->template->message,
             'parameters' => $data->receiver_params,
-            'receiver' => $receiver
+            'receiver' => $receiver,
+            'type' => [
+                'type' => $data->event_type,
+                'every' => $data->scheduled_every,
+                'at' => $data->scheduled_at
+            ]
         ]);
     }
 
@@ -181,5 +187,21 @@ class EventController extends BaseController {
 
     public function sentManually($id){
         return $this->send($id);
+    }
+
+    public function destroy($id){
+        try {
+            $data = Event::find($id)->delete();
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'data deleted'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'code' => 500,
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

@@ -15,9 +15,9 @@ class CreateJobLogsTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('event_id')->nullable();
             $table->foreign('event_id')->references('id')->on('waliby_events')->onUpdate('CASCADE')->onDelete('SET NULL');
-            $table->datetime('reserved_at');
-            $table->datetime('finished_at');
-            $table->enum('status', ['success', 'error']);
+            $table->datetime('reserved_at')->nullable();
+            $table->datetime('finished_at')->nullable();
+            $table->enum('status', ['success', 'error'])->nullable();
             $table->text('exception')->nullable();
             $table->timestamps();
             $table->softDeletes();

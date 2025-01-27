@@ -2,12 +2,11 @@
 
 namespace Ramatimati\Waliby\App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model {
-    use HasFactory, SoftDeletes;
+    use SoftDeletes;
 
     protected $table = 'waliby_events';
     public $fillable = [
