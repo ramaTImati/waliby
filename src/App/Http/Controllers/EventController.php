@@ -94,7 +94,12 @@ class EventController extends BaseController {
             'event_name' => $data->event_name,
             'message' => $data->template->message,
             'parameters' => $data->receiver_params,
-            'receiver' => $receiver
+            'receiver' => $receiver,
+            'type' => [
+                'type' => $data->event_type,
+                'every' => $data->scheduled_every,
+                'at' => $data->scheduled_at
+            ]
         ]);
     }
 

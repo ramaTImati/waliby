@@ -19,6 +19,7 @@ Route::prefix('waliby')->name('waliby.')->middleware('web')->group(function(){
         Route::post('/', [TemplateController::class, 'store'])->name('store');
         Route::get('show/{id}', [TemplateController::class, 'show'])->name('show');
         Route::put('update/{id}', [TemplateController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [TemplateController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('events')->name('events.')->group(function(){
@@ -35,7 +36,7 @@ Route::prefix('waliby')->name('waliby.')->middleware('web')->group(function(){
         Route::get('/', [HistoryController::class, 'index'])->name('index');
     });
 
-    Route::prefix('meta')->name('metas.')->group(function(){
+    Route::prefix('metas')->name('metas.')->group(function(){
         Route::get('/', [MetaController::class, 'index'])->name('index');
         Route::post('update', [MetaController::class, 'update'])->name('update');
     });

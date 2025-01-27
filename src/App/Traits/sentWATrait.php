@@ -144,6 +144,14 @@ trait sentWATrait{
             $code = 500;
         }
 
+        try {
+            Event::where('id', $event_id)->update([
+                'last_processed' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+        } catch (\Throwable $th) {
+            \Log::info('WALIBY TRAIT : '.$th->getMessage());
+        }
+
         $requestFormat = [
             'code' => $code,
             'data' => [

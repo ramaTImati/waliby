@@ -223,5 +223,42 @@
                 }
             })
         })
+
+        function deleteTemplate(id){            
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ url('waliby/templates/destroy') }}/"+id,
+                        type: 'DELETE',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(res) {
+                            table.draw()
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: res.message,
+                                icon: "success"
+                            });
+                        },
+                        error: function(e){
+                            Swal.fire({
+                                title: "Error",
+                                text: e.responseJSON.message,
+                                icon: "error"
+                            });
+                        }
+                    })
+                }
+            })
+        }
     </script>
 @endpush

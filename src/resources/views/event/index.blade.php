@@ -84,6 +84,11 @@
                             <textarea id="detailReceiverParams" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
+                            <label for="detailEventType">Event Type</label>
+                            <input type="text" id="detailEventType" class="form-control">
+                        </div>
+                        <div id="panelType"></div>
+                        <div class="mb-3">
                             <label for="detailReceiverPanel" class="form-label">Receiver</label>
                             <div class="card">
                                 <div class="card-body" id="detailReceiverPanel">
@@ -221,6 +226,21 @@
                     $("#detailEventName").text(res.event_name)
                     $("#detailEventMessage").text(res.message)
                     $("#detailReceiverParams").text(res.parameters)
+                    $("#detailEventType").val(res.type.type)
+                    $("#panelType").empty()
+                    if (res.type.type == "recurring") {
+                        let html = `<div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="detailEvery">Scheduled Every</label>
+                                    <input type="text" id="detailEvery" class="form-control" value="${res.type.every}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="detailAt">Scheduled At</label>
+                                    <input type="text" id="detailAt" class="form-control" value="${res.type.at}">
+                                </div>
+                            </div>`
+                        $("#panelType").append(html)
+                    }
                     let receiver = res.receiver
                     
                     $("#detailReceiverPanel").empty()
@@ -276,6 +296,7 @@
                     Swal.showLoading();
                 },
                 success: function(response){
+                    table.draw()
                     Swal.fire({
                         title: "Success",
                         icon: "success",

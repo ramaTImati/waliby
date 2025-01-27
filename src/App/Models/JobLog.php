@@ -11,6 +11,6 @@ class JobLog extends Model
 
     protected $table = 'waliby_job_logs';
     public $fillable = [
-        'job_id', 'reserved_at', 'finished_at', 'status', 'exception'
+        'event_id', 'reserved_at', 'finished_at', 'status', 'exception'
     ];
 }
