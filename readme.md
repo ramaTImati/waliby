@@ -24,7 +24,7 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105403_create_message_templates_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105510_create_message_histories_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105515_create_events_table.php
-php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105555_job_logs_table.php
+php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105555_create_job_logs_table.php
 ```
 
 ## Configuration

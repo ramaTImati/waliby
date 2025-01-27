@@ -9,7 +9,7 @@ class Meta extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'waliby_meta';
+    protected $table = 'waliby_metas';
     public $fillable = [
         'name', 'value'
     ];
