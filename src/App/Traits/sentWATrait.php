@@ -12,6 +12,8 @@ use Carbon\Carbon;
 trait sentWATrait{
     public function send($event_id){
         $endpoint = config('waliby.endpoint');
+        $resp = '{"status":true,"message":"Text Message is pending and waiting to be processed. with error: 0","data":{"device_id":"7RRG1P","quota":"unlimited","messages":[{"id":"5e4f1184-d176-48b5-b762-abc6e0ceea32","phone":"6282315535393","message":"test https://p-men.petrokimia-gresik.net","status":"pending","ref_id":null},{"id":"d55cdb87-3dc3-41ef-bb05-0c5d0b88bd97","phone":"628986957465","message":"test https://p-men.petrokimia-gresik.net","status":"pending","ref_id":null}]}}';
+        return $this->storeHistory($resp);
 
         $requestFormat = $this->processData($event_id);
         if ($requestFormat['code'] == 200) {
@@ -100,7 +102,9 @@ trait sentWATrait{
                     }else{
                         $dynamic = null;
                     }
-                    $body[$key][$explode[0]] = $dynamic;
+                    $keyValue = str_replace('#array#', '', $explode[0]);
+                    $keyValue = str_replace('#string#', '', $keyValue);
+                    $body[$key][$keyValue] = $dynamic;
                 }
             }
             $bodyFormat = $body;
@@ -122,10 +126,10 @@ trait sentWATrait{
                         }
                         $dynamic = $message;
                     }else{
-                        $dynamic = 'memek';
+                        $dynamic = null;
                     }
                     $keyValue = str_replace('#array#', '', $explode[0]);
-                    $keyValue = str_replace('#string#', '', $explode[0]);
+                    $keyValue = str_replace('#string#', '', $keyValue);
                     $body[$key][$keyValue] = $dynamic;
                 }
             }
@@ -168,28 +172,43 @@ trait sentWATrait{
         $format = json_decode($fetchFormat->value, true);
 
         $responseType = '';
-        $resParent = '';
+        // $resParent = '';
         $resPhoneNumber = '';
         $resId = '';
         $resStatus = '';
+        $resMessage = '';
+        $path = '';
 
         foreach ($format as $key => $value) {
-            if (is_array($value)) {
+            if (is_array($value)) { 
                 foreach ($value as $karray => $varray) {
-                    if (is_array($varray)) {
-                        $resParent = $karray;
+                    if (is_array($varray)) { 
+                        $path = $karray;
                         foreach ($varray as $kchild => $vchild) {
                             $responseType = 'hasChild';
-                            if($vchild == '~id~'){
-                                $resId = $kchild;
+                            if(is_array($vchild)){
+                                $path = $key.'/'.$karray;
+                                foreach ($vchild as $kgc => $vgc) {
+                                    if ($vgc == '~id~') {
+                                        $resId = $kgc;
+                                    }elseif ($vgc == '~phoneNumber~') {
+                                        $resPhoneNumber = $kgc;
+                                    }elseif ($vgc == '~status~') {
+                                        $resStatus = $kgc;
+                                    }elseif ($vgc == '~message~') {
+                                        $resMessage = $kgc;
+                                    }
+                                }
                             }elseif ($vchild == '~phoneNumber~') {
                                 $resPhoneNumber = $kchild;
                             }elseif ($vchild == '~status~') {
                                 $resStatus = $kchild;
+                            }elseif ($vchild == '~id~') {
+                                $resId = $kchild;
+                            }elseif ($vchild == '~message~') {
+                                $resMessage = $kchild;
                             }
                         }
-                    }else{
-                        return 'api response not supported by waliby';
                     }
                 }
             }elseif ($value == '~id~') {
@@ -201,6 +220,9 @@ trait sentWATrait{
             }elseif ($value == '~status~') {
                 $responseType = 'single';
                 $resStatus = $key;
+            }elseif ($value == '~message~') {
+                $responseType = 'single';
+                $resMessage = $key;
             }
         }
 
@@ -227,7 +249,32 @@ trait sentWATrait{
                 }
             }
         }elseif ($responseType == 'hasChild') {
-            # code...
+            $pathId = explode('/', $path);
+            $countPath = count($pathId);
+            if ($countPath == 2) {
+                foreach ($response[$pathId[0]][$pathId[1]] as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $kc => $vc) {
+                            if ($kc == $resId) {
+                                $responseValue[$key]['message_id'] = $vc;
+                            }
+                            if ($kc == $resPhoneNumber) {
+                                $responseValue[$key]['phone_number'] = $vc;
+                            }
+                            if ($kc == $resStatus) {
+                                $responseValue[$key]['status'] = $vc;
+                            }
+                            if ($kc == $resMessage) {
+                                $responseValue[$key]['message_text'] = $vc;
+                            }
+                            $responseValue[$key]['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                            $responseValue[$key]['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                        }
+                    }else{
+                        // return $value;
+                    }
+                }
+            }
         }else{
             return 'api response not recognized by waliby';
         }
