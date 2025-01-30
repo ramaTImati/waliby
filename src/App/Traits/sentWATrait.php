@@ -12,8 +12,6 @@ use Carbon\Carbon;
 trait sentWATrait{
     public function send($event_id){
         $endpoint = config('waliby.endpoint');
-        $resp = '{"status":true,"message":"Text Message is pending and waiting to be processed. with error: 0","data":{"device_id":"7RRG1P","quota":"unlimited","messages":[{"id":"5e4f1184-d176-48b5-b762-abc6e0ceea32","phone":"6282315535393","message":"test https://p-men.petrokimia-gresik.net","status":"pending","ref_id":null},{"id":"d55cdb87-3dc3-41ef-bb05-0c5d0b88bd97","phone":"628986957465","message":"test https://p-men.petrokimia-gresik.net","status":"pending","ref_id":null}]}}';
-        return $this->storeHistory($resp);
 
         $requestFormat = $this->processData($event_id);
         if ($requestFormat['code'] == 200) {
@@ -172,7 +170,6 @@ trait sentWATrait{
         $format = json_decode($fetchFormat->value, true);
 
         $responseType = '';
-        // $resParent = '';
         $resPhoneNumber = '';
         $resId = '';
         $resStatus = '';
