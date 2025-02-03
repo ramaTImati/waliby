@@ -163,7 +163,7 @@ class EventController extends BaseController {
 
         $result = [];
         foreach ($params as $key => $value) {
-            $result[$key]['id'] = str_replace(' ', '', $value);
+            $result[$key]['id'] = str_replace(' = ', '', $value);
             $result[$key]['text'] = $value;
         }
         $result = array_values($result);
