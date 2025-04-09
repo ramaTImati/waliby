@@ -19,7 +19,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'token' => env('WALIBY_AUTH_TOKEN'),
-    'endpoint' => env('WALIBY_ENDPOINT_BULK_MESSAGE'),
+    'endpoint' => env('WALIBY_ENDPOINT_SINGLE_MESSAGE'),
     'responseType' => env('WALIBY_RESPONSE_TYPE', 'standalone'),
     'responseMessageIdKey' => env('WALIBY_RESPONSE_MESSAGE_ID_KEY', 'id'),
     'responsePhoneKey' => env('WALIBY_RESPONSE_PHONE_KEY', 'id'),

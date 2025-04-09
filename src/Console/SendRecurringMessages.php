@@ -8,7 +8,7 @@ use Ramatimati\Waliby\App\Models\Event;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 
-class SendWA extends Command
+class SendRecurringMessages extends Command
 {
     use sentWATrait;
 
@@ -17,7 +17,7 @@ class SendWA extends Command
      *
      * @var string
      */
-    protected $signature = 'waliby:send-wa';
+    protected $signature = 'waliby:send-recurring-messages';
 
     /**
      * The console command description.
@@ -43,7 +43,7 @@ class SendWA extends Command
                                 'last_processed' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
     
-                            $this->send($value->id);
+                            $this->addToQueue($value->id);
     
                             $joblog = JobLog::create([
                                 'event_id' => $value->id,
@@ -68,7 +68,7 @@ class SendWA extends Command
                                 'last_processed' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
     
-                            $this->send($value->id);
+                            $this->addToQueue($value->id);
     
                             $joblog = JobLog::create([
                                 'event_id' => $value->id,
@@ -93,7 +93,7 @@ class SendWA extends Command
                                 'last_processed' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
     
-                            $this->send($value->id);
+                            $this->addToQueue($value->id);
     
                             $joblog = JobLog::create([
                                 'event_id' => $value->id,
@@ -119,7 +119,7 @@ class SendWA extends Command
                                 'last_processed' => Carbon::now()->format('Y-m-d H:i:s')
                             ]);
     
-                            $this->send($value->id);
+                            $this->addToQueue($value->id);
     
                             $joblog = JobLog::create([
                                 'event_id' => $value->id,
