@@ -8,7 +8,7 @@
         <div class="row mb-2">
             <label for="header" class="form-label col-lg-2">Request Headers Format</label>
             <div class="col-lg-10">
-                <textarea class="form-control" name="header" id="header" placeholder="Type Here..">{{$res['REQUEST_HEADERS']}}</textarea>
+                <textarea class="form-control" name="header" id="header" placeholder="Type Here..">{{ $res ? $res['REQUEST_HEADERS'] : ''}}</textarea>
             </div>
         </div>
         <div class="row mb-2">
@@ -45,7 +45,7 @@ Authorization=~token~,Content-Type=application/json
         <div class="row mb-2">
             <label for="header" class="form-label col-lg-2">Request Body Format</label>
             <div class="col-lg-10">
-                <textarea class="form-control" name="body" id="body" placeholder="Type Here..">{{$res['REQUEST_BODY']}}</textarea>
+                <textarea class="form-control" name="body" id="body" placeholder="Type Here..">{{$res ? $res['REQUEST_BODY'] : ''}}</textarea>
             </div>
         </div>
         <div class="row mb-2">
@@ -109,7 +109,7 @@ data=+#array#target=~phoneNumber~,message=~message~
         <div class="row mb-2">
             <label for="header" class="form-label col-lg-2">Response Format</label>
             <div class="col-lg-10">
-                <textarea class="form-control" name="response" id="response" placeholder="Type Here..">{{$res['RESPONSE']}}</textarea>
+                <textarea class="form-control" name="response" id="response" placeholder="Type Here..">{{$res ? $res['RESPONSE'] : ''}}</textarea>
             </div>
         </div>
         <div class="row mb-2">

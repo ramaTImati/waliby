@@ -1,6 +1,8 @@
 # Waliby (WA Gateway Library for Laravel)
 
-Laravel > 5.8
+## Requirement
+- Laravel > 5.8
+- Cron Jobs configuration, this package use laravel built in task scheduling to handle queued messages
 
 ## Installation
 
@@ -24,6 +26,7 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105403_create_message_templates_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105510_create_message_histories_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105515_create_events_table.php
+php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105545_create_jobs_table.php
 php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/2024_08_17_105555_create_job_logs_table.php
 ```
 
@@ -41,7 +44,7 @@ WALIBY_COLUMN_CONDITION_NAME_1=required
 
 # WALIBY WA GATEWAY
 WALIBY_AUTH_TOKEN=
-WALIBY_ENDPOINT_BULK_MESSAGE=https://example.com/send
+WALIBY_ENDPOINT_SINGLE_MESSAGE=https://example.com/send
 WALIBY_WEBHOOK_MESSAGE_ID_KEY=id
 WALIBY_WEBHOOK_STATUS_KEY=status
 ```
@@ -56,10 +59,13 @@ php artisan vendor:publish --tag=Waliby
 Waliby included some routes
 
 ```php
-https://example.com/waliby/metas
 https://example.com/waliby/templates
 https://example.com/waliby/events
 https://example.com/waliby/history
+```
+Carefull with content in this page, very sensitif information and you should secure it from public!
+```php
+https://example.com/waliby/metas
 ```
 
 #### Webhook

@@ -163,7 +163,9 @@ class EventController extends BaseController {
 
         $result = [];
         foreach ($params as $key => $value) {
-            $result[$key]['id'] = str_replace(' = ', '', $value);
+            $repl1 = str_replace(' = ', '=', $value);
+            $repl2 = str_replace(', ', ',', $repl1);
+            $result[$key]['id'] = $repl2;
             $result[$key]['text'] = $value;
         }
         $result = array_values($result);
@@ -186,7 +188,7 @@ class EventController extends BaseController {
     }
 
     public function sentManually($id){
-        return $this->send($id);
+        return $this->addToQueue($id);
     }
 
     public function destroy($id){

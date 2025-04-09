@@ -2,9 +2,10 @@
 
 namespace Ramatimati\Waliby;
 
-use Ramatimati\Waliby\Console\SendWA;
-use Illuminate\Support\ServiceProvider;
+use Ramatimati\Waliby\Console\SendRecurringMessages;
 use Illuminate\Console\Scheduling\Schedule;
+use Ramatimati\Waliby\Console\SendMessage;
+use Illuminate\Support\ServiceProvider;
 
 class WalibyServiceProvider extends ServiceProvider
 {
@@ -34,12 +35,14 @@ class WalibyServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                SendWA::class,
+                SendMessage::class,
+                SendRecurringMessages::class,
             ]);
 
             $this->app->booted(function () {
                 $schedule = $this->app->make(Schedule::class);
-                $schedule->command('waliby:send-wa')->hourlyAt(7);
+                $schedule->command('waliby:send-message')->everyThirtySeconds();
+                $schedule->command('waliby:send-recurring-messages')->hourlyAt(7);
             });
         }
     }

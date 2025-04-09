@@ -4,25 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJobLogsTable extends Migration
+class CreateJobsTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('waliby_job_logs', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('waliby_jobs', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('event_id')->nullable();
             $table->foreign('event_id')->references('id')->on('waliby_events')->onUpdate('CASCADE')->onDelete('SET NULL');
             $table->string('phone_number');
             $table->string('text');
-            $table->datetime('reserved_at')->nullable();
-            $table->datetime('finished_at')->nullable();
-            $table->enum('status', ['success', 'error'])->nullable();
-            $table->text('exception')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +26,6 @@ class CreateJobLogsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waliby_job_logs');
+        Schema::dropIfExists('waliby_jobs');
     }
 };
