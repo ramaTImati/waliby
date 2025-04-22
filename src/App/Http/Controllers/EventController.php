@@ -88,7 +88,7 @@ class EventController extends BaseController {
         })->when($countParams == 3, function($sub) use ($params){
             return $sub->where($params[0][0], $params[0][1])->where($params[1][0], $params[1][1])->where($params[2][0], $params[2][1]);
         })
-        ->select($nameColumn)
+        ->select($nameColumn.' as name')
         ->get();
 
         return response()->json([
