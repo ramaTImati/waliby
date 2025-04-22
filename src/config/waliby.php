@@ -6,9 +6,11 @@ return [
     | Waliby Phone Book
     |--------------------------------------------------------------------------
     */  
+    'phoneBookConnection' => env('WALIBY_PHONE_BOOK_CONNECTION', 'mysql'),
     'phoneBookTable' => env('WALIBY_PHONE_BOOK', 'waliby'),
     'phoneNumberColumn' => env('WALIBY_PHONE_NUMBER_COLUMN', 'nomor'),
     'nameColumn' => env('WALIBY_NAME_COLUMN', 'nama'),
+    'eventPriorityId' => env('WALIBY_EVENT_PRIORITY_ID', null),
     'columnCondition1' => env('WALIBY_COLUMN_CONDITION_NAME_1'),
     'columnCondition2' => env('WALIBY_COLUMN_CONDITION_NAME_2'),
     'columnCondition3' => env('WALIBY_COLUMN_CONDITION_NAME_3'),

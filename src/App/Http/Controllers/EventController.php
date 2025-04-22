@@ -77,17 +77,18 @@ class EventController extends BaseController {
         }
 
         // get receiver data
+        $connection = config('waliby.phoneBookConnection');
         $table = config('waliby.phoneBookTable');
         $nameColumn = config('waliby.nameColumn');
         $countParams = count($params);
-        $receiver = DB::table($table)->when($countParams == 1, function($sub) use ($params){
+        $receiver = DB::connection($connection)->table($table)->when($countParams == 1, function($sub) use ($params){
             return $sub->where($params[0][0], $params[0][1]);
         })->when($countParams == 2, function($sub) use ($params){
             return $sub->where($params[0][0], $params[0][1])->where($params[1][0], $params[1][1]);
         })->when($countParams == 3, function($sub) use ($params){
             return $sub->where($params[0][0], $params[0][1])->where($params[1][0], $params[1][1])->where($params[2][0], $params[2][1]);
         })
-        ->select($nameColumn)
+        ->select($nameColumn.' as name')
         ->get();
 
         return response()->json([
@@ -104,6 +105,7 @@ class EventController extends BaseController {
     }
 
     public function getReceiver(Request $request){
+        $connection = config('waliby.phoneBookConnection');
         $table = config('waliby.phoneBookTable');
         $colCondition1 = config('waliby.columnCondition1');
         $colCondition2 = config('waliby.columnCondition2');
@@ -111,17 +113,17 @@ class EventController extends BaseController {
 
         
         if ($colCondition1) {
-            $condition1 = DB::table($table)->select($colCondition1)->groupBy($colCondition1)->get();
+            $condition1 = DB::connection($connection)->table($table)->select($colCondition1)->groupBy($colCondition1)->get();
         }else {
             $condition1 = null;
         }
         if ($colCondition2) {
-            $condition2 = DB::table($table)->select($colCondition2)->groupBy($colCondition2)->get();
+            $condition2 = DB::connection($connection)->table($table)->select($colCondition2)->groupBy($colCondition2)->get();
         }else{
             $condition2 = null;
         }
         if ($colCondition3) {
-            $condition3 = DB::table($table)->select($colCondition3)->groupBy($colCondition3)->get();
+            $condition3 = DB::connection($connection)->table($table)->select($colCondition3)->groupBy($colCondition3)->get();
         }else{
             $condition3 = null;
         }

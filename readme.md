@@ -35,12 +35,14 @@ This package required base table or database view that contain phone number and 
 .env `required`
 ```php
 # WALIBY PHONE BOOK PARAMS
+WALIBY_PHONE_BOOK_CONNECTION=mysql
 WALIBY_PHONE_BOOK=your table or database view
 WALIBY_PHONE_NUMBER_COLUMN=
 WALIBY_NAME_COLUMN=
 WALIBY_COLUMN_CONDITION_NAME_1=required
 #WALIBY_COLUMN_CONDITION_NAME_2=optional
 #WALIBY_COLUMN_CONDITION_NAME_3=optional
+#WALIBY_EVENT_PRIORITY_ID=optional // used to prioritize event in the waliby queue
 
 # WALIBY WA GATEWAY
 WALIBY_AUTH_TOKEN=
@@ -89,46 +91,14 @@ public function test(){
 Waliby come with built in task scheduling every hour at 7, you can configure at *Waliby Event*, make sure you have configure cron job in your apllication
 
 #### Available Method
-1. `GetMessage($array)`
-This function use to get message template base from `https://example.com/waliby/templates`
-   - `string` templateName => Unique message template name
-   - `array` phoneNumber => Receiver phone number. example ['0823xxxx....', '0853xxxx....']
-2. `SendMessage($type, $endpoint, $header, $payload)` 
-This function support single and multiple send message
-   - `string` type => "POST" / "GET" / "PUT" / "PATCH" / "DELETE"
-   - `string` endpoint => "https://example.com/example"
-   - `array` header => Your request header
-   - `array` payload => Your request payload 
-3. `History($params)`
-This function use to store message history from `SendMessage` function response
-   - `array` params => array must contain some keys `message_id`, `phone_number`, `message_text`, `status`
-      - `message_id` => required
-      - `phone_number` => required
-      - `message_text` => optional
-      - `status` => required
-   - If you want to store multiple, simply write multidimensional array like this
-      ```php
-      $params = [
-         [
-            'message_id' => 'e11e7377-ac7a-405e-b520-16dd1f22f204',
-            'phone_number' => '62898xxx...',
-            'message_text' => 'test',
-            'status' => 'pending',
-            'created_at' => new dateTime,
-            'updated_at' => new dateTime,
-         ],
-         [
-            'message_id' => 'ce947524-c641-4c54-90b5-9eb3b714a3fe',
-            'phone_number' => '62858xxx...',
-            'message_text' => 'test',
-            'status' => 'pending',
-            'created_at' => new dateTime,
-            'updated_at' => new dateTime,
-         ],
-      ]
-      ```
-
-
+1. `SendMessage($phoneNumber, $messageTemplateName)` 
+This function only support sent single message
+   - `string` phoneNumber => "62812xxxxxxxx"
+   - `string` messageTemplateName => "template1"
+2. `RemoveFromQueue($phoneNumber, $eventId)`
+This function used to remove single pending message in waliby queue
+   - `string` phoneNumber => "62812xxxxxxxx"
+   - `string` eventId => nullable
 ## License
 
 [MIT](license)
