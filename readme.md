@@ -42,6 +42,7 @@ WALIBY_NAME_COLUMN=
 WALIBY_COLUMN_CONDITION_NAME_1=required
 #WALIBY_COLUMN_CONDITION_NAME_2=optional
 #WALIBY_COLUMN_CONDITION_NAME_3=optional
+#WALIBY_EVENT_PRIORITY_ID=optional // used to prioritize event in the waliby queue
 
 # WALIBY WA GATEWAY
 WALIBY_AUTH_TOKEN=
@@ -94,7 +95,10 @@ Waliby come with built in task scheduling every hour at 7, you can configure at 
 This function only support sent single message
    - `string` phoneNumber => "62812xxxxxxxx"
    - `string` messageTemplateName => "template1"
-
+2. `RemoveFromQueue($phoneNumber, $eventId)`
+This function used to remove single pending message in waliby queue
+   - `string` phoneNumber => "62812xxxxxxxx"
+   - `string` eventId => nullable
 ## License
 
 [MIT](license)

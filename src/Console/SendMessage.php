@@ -34,7 +34,13 @@ class SendMessage extends Command
     public function handle()
     {
         //
-        $getSingleMessage = Job::orderBy('created_at', 'ASC')->first();
+        $jobPriorityId = config('waliby.eventPriorityId');
+        $getSingleMessage = Job::orderBy('created_at', 'ASC')
+            ->when($jobPriorityId, function($sub) use ($jobPriorityId){
+                return $sub->where('event_id', $jobPriorityId);
+            })
+            ->orderBy('created_at', 'ASC')
+            ->first();
 
         if (isset($getSingleMessage)) {
             $insertToLog = JobLog::create([
