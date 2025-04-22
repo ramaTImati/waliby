@@ -13,8 +13,9 @@ use Illuminate\Support\Str;
 
 class TemplateController extends BaseController {
     public function index(Request $request){
+        $connection = config('waliby.phoneBookConnection');
         $table = config('waliby.phoneBookTable');
-        $column = DB::connection()->getSchemaBuilder()->getColumnListing($table);
+        $column = DB::connection($connection)->getSchemaBuilder()->getColumnListing($table);
 
         if ($request->ajax()) {
             $data = MessageTemplate::orderBy('created_at', 'DESC')->get();

@@ -6,6 +6,7 @@ return [
     | Waliby Phone Book
     |--------------------------------------------------------------------------
     */  
+    'phoneBookConnection' => env('WALIBY_PHONE_BOOK_CONNECTION', 'mysql'),
     'phoneBookTable' => env('WALIBY_PHONE_BOOK', 'waliby'),
     'phoneNumberColumn' => env('WALIBY_PHONE_NUMBER_COLUMN', 'nomor'),
     'nameColumn' => env('WALIBY_NAME_COLUMN', 'nama'),
