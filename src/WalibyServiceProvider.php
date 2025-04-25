@@ -41,7 +41,7 @@ class WalibyServiceProvider extends ServiceProvider
 
             $this->app->booted(function () {
                 $schedule = $this->app->make(Schedule::class);
-                $schedule->command('waliby:send-message')->everyThirtySeconds();
+                $schedule->command('waliby:send-message')->everyMinute();
                 $schedule->command('waliby:send-recurring-messages')->hourlyAt(7);
             });
         }

@@ -3,6 +3,7 @@
 namespace Ramatimati\Waliby;
 
 use Ramatimati\Waliby\App\Traits\sentWATrait;
+use Ramatimati\Waliby\App\Models\History;
 use Ramatimati\Waliby\App\Models\Job;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,26 @@ class Waliby {
             return response()->json([
                 'message' => $th->getMessage().' on line '.$th->getLine()
             ], 500);
+        }
+    }
+
+    public static function StoreHistory(array $params){
+        try {
+            DB::beginTransaction();
+
+            $data = History::insert($params);
+
+            DB::commit();
+            return response()->json([
+                'code' => 200,
+                'message' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json([
+                'code' => 500,
+                'message' => $th->getMessage().' on line '.$th->getLine()
+            ]);
         }
     }
 }

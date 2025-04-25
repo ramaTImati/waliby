@@ -12,6 +12,7 @@
             <td class="text-center">Phone Number</td>
             <td class="text-center">Message</td>
             <td class="text-center">Status</td>
+            <td class="text-center">Timestamp</td>
         </thead>
     </table>
 @endsection
@@ -30,7 +31,8 @@
                     {data: 'message_id'},
                     {data: 'phone_number'},
                     {data: 'message_text'},
-                    {data: 'status'}
+                    {data: 'status'},
+                    {data: 'updated_at'}
                 ]
             })
         })
