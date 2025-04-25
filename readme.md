@@ -3,6 +3,15 @@
 ## Requirement
 - Laravel > 5.8
 - Cron Jobs configuration, this package use laravel built in task scheduling to handle queued messages
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+- Laravel Queue configuration, use supervisor to keep your process running
+```bash
+php artisan queue:table
+php artisan migrate
+php artisan queue:work
+```
 
 ## Installation
 
@@ -34,6 +43,8 @@ php artisan migrate --path=/vendor/ramatimati/waliby/src/database/migrations/202
 This package required base table or database view that contain phone number and name !\
 .env `required`
 ```php
+QUEUE_CONNECTION=database
+
 # WALIBY PHONE BOOK PARAMS
 WALIBY_PHONE_BOOK_CONNECTION=mysql
 WALIBY_PHONE_BOOK=your table or database view
@@ -84,7 +95,7 @@ You can simply call Waliby Class to run this library
 use Ramatimati\Waliby\Waliby;
 
 public function test(){
-   Waliby::SendMessage(type, endpoint, header, payload)
+   Waliby::SendMessage($phoneNumber, $messageTemplateName)
 }
 ```
 #### Task Scheduling
